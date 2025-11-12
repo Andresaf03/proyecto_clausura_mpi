@@ -19,3 +19,10 @@ Makefile
 # Misc
 .DS_Store
 */.DS_Store
+
+# Env
+.venv
+.vscode
+
+# Executables
+main
