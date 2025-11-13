@@ -1,5 +1,4 @@
 # Build artifacts
-build/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
@@ -13,7 +12,7 @@ cmake_install.cmake
 *.out
 
 # Generated data
-*.csv
+results/*.csv
 
 # Misc
 .DS_Store
@@ -26,3 +25,4 @@ cmake_install.cmake
 # Executables
 main
 src/main
+build/bow_app

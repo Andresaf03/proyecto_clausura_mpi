@@ -315,7 +315,9 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
     }
 
     if (!doc_names.empty()) {
-      write_csv(matrix, global_vocabulary, doc_names, "bow_mpi.csv");
+      const std::filesystem::path output_file = std::filesystem::path("results") / "bow_mpi.csv";
+      std::filesystem::create_directories(output_file.parent_path());
+      write_csv(matrix, global_vocabulary, doc_names, output_file.string());
     } else {
       std::cerr << "MPI: No se generaron filas, revisar entradas." << std::endl;
     }

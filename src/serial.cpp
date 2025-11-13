@@ -157,7 +157,10 @@ ExperimentResult run_serial(const ExperimentConfig& config) {
 
   const std::vector<std::string> vocabulary = build_vocabulary(document_counts);
   const std::vector<std::vector<int>> matrix = build_matrix(document_counts, vocabulary);
-  write_csv(matrix, vocabulary, processed_names, "bow_serial.csv");
+
+  const std::filesystem::path output_file = std::filesystem::path("results") / "bow_serial.csv";
+  std::filesystem::create_directories(output_file.parent_path());
+  write_csv(matrix, vocabulary, processed_names, output_file.string());
 
   const auto end_time = std::chrono::steady_clock::now();
   const double elapsed_ms =
