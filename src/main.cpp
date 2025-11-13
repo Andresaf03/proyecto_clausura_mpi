@@ -12,7 +12,7 @@
 
 namespace {
 
-// Carga la lista de archivos desde un archivo de texto plano.
+// Carga la lista de archivos desde un archivo de texto plano (uno por línea).
 std::vector<std::string> load_document_names(const std::string& list_path) {
   std::vector<std::string> names;
   std::ifstream input(list_path);
@@ -31,8 +31,9 @@ std::vector<std::string> load_document_names(const std::string& list_path) {
 }
 
 // Genera rutas completas (ej. data/books/*.txt) a partir de los nombres en la lista.
+// Si el archivo no está junto a la lista, se intenta en el subdirectorio `books/`.
 std::vector<std::string> resolve_document_paths(const std::string& list_path,
-                                               const std::vector<std::string>& names) {
+                                                const std::vector<std::string>& names) {
   std::vector<std::string> resolved;
   const std::filesystem::path list_dir = std::filesystem::path(list_path).parent_path();
   const std::filesystem::path books_dir = list_dir / "books";
@@ -54,6 +55,7 @@ std::vector<std::string> resolve_document_paths(const std::string& list_path,
 }  // namespace
 
 int main(int argc, char** argv) {
+  // Inicializamos MPI una única vez para toda la orquestación.
   MPI_Init(nullptr, nullptr);
 
   int world_rank = 0;
@@ -115,6 +117,7 @@ int main(int argc, char** argv) {
       std::cout << "  Serial promedio acumulado: " << serial_total / (i + 1) << " ms" << std::endl;
     }
 
+    // Sincronizamos todos los procesos antes de iniciar la corrida paralela.
     MPI_Barrier(MPI_COMM_WORLD);
     const auto parallel_result = bow::run_parallel(base_config);
     if (world_rank == 0) {

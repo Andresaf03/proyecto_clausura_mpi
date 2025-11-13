@@ -20,6 +20,7 @@
 
 namespace {
 
+// Abre un archivo completo y regresa su contenido como string.
 std::string read_file(const std::string& path) {
   std::ifstream input(path);
   if (!input.is_open()) {
@@ -32,6 +33,7 @@ std::string read_file(const std::string& path) {
   return buffer.str();
 }
 
+// Normaliza a minúsculas y separa tokens con cualquier carácter no alfanumérico.
 std::vector<std::string> tokenize_document(const std::string& content) {
   std::vector<std::string> tokens;
   std::string current_token;
@@ -54,6 +56,7 @@ std::vector<std::string> tokenize_document(const std::string& content) {
   return tokens;
 }
 
+// Cuenta cuántas veces aparece cada token dentro de un documento.
 std::map<std::string, int> count_tokens(const std::vector<std::string>& tokens) {
   std::map<std::string, int> word_counts;
   for (const auto& token : tokens) {
@@ -62,6 +65,7 @@ std::map<std::string, int> count_tokens(const std::vector<std::string>& tokens) 
   return word_counts;
 }
 
+// Serializa un vocabulario (ordenado) separando cada palabra con '\n'.
 std::string join_words_with_newline(const std::set<std::string>& words) {
   std::string serialized;
   for (const auto& word : words) {
@@ -71,6 +75,7 @@ std::string join_words_with_newline(const std::set<std::string>& words) {
   return serialized;
 }
 
+// Operación inversa: divide un string por saltos de línea y descarta entradas vacías.
 std::vector<std::string> split_by_newline(const std::string& data) {
   std::vector<std::string> parts;
   std::string current;
@@ -90,6 +95,7 @@ std::vector<std::string> split_by_newline(const std::string& data) {
   return parts;
 }
 
+// Escribe la matriz final (ordenada por documento) en formato CSV.
 void write_csv(const std::vector<std::vector<int>>& matrix,
                const std::vector<std::string>& vocabulary,
                const std::vector<std::string>& doc_names,
@@ -119,6 +125,7 @@ void write_csv(const std::vector<std::vector<int>>& matrix,
 
 namespace bow {
 
+// Ejecuta la versión MPI distribuyendo documentos y reuniendo resultados en rank 0.
 ExperimentResult run_parallel(const ExperimentConfig& config) {
   ExperimentResult result;
   if (config.document_paths.empty()) {
@@ -171,8 +178,8 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
     vocab_displs.resize(world_size);
     int total = 0;
     for (int i = 0; i < world_size; ++i) {
-      vocab_displs[i] = total;
-      total += vocab_byte_counts[i];
+      vocab_displs[i] = total;  // Offset dentro del buffer concatenado.
+      total += vocab_byte_counts[i];  // Sumamos los bytes aportados por cada rank.
     }
     global_vocab_buffer.resize(total);
   }
@@ -245,7 +252,7 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
     doc_index_displs.resize(world_size);
     int running = 0;
     for (int i = 0; i < world_size; ++i) {
-      doc_index_displs[i] = running;
+      doc_index_displs[i] = running;  // Posición donde inicia el bloque del proceso i.
       running += row_counts[i];
     }
     gathered_doc_indices.resize(running);
@@ -265,8 +272,8 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
     value_displs.resize(world_size);
     int running = 0;
     for (int i = 0; i < world_size; ++i) {
-      value_counts[i] = row_counts[i] * vocab_size;
-      value_displs[i] = running;
+      value_counts[i] = row_counts[i] * vocab_size;  // Número de enteros que envía cada proceso.
+      value_displs[i] = running;                     // Offset dentro del buffer plano.
       running += value_counts[i];
     }
     gathered_values.resize(running);
@@ -279,7 +286,8 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
 
   if (world_rank == 0) {
     const int total_rows =
-        std::accumulate(row_counts.begin(), row_counts.end(), 0, std::plus<int>());
+        std::accumulate(row_counts.begin(), row_counts.end(), 0,
+                        std::plus<int>());  // Total de documentos recibidos.
     std::vector<std::pair<int, std::vector<int>>> ordered_rows;
     ordered_rows.reserve(total_rows);
 
@@ -313,12 +321,14 @@ ExperimentResult run_parallel(const ExperimentConfig& config) {
     }
   }
 
+  // Aseguramos que todos escribieron/envíaron antes de tomar el tiempo final.
   MPI_Barrier(MPI_COMM_WORLD);
   const auto end_time = std::chrono::steady_clock::now();
   const double local_elapsed =
       std::chrono::duration<double, std::milli>(end_time - start_time).count();
 
   double max_elapsed = 0.0;
+  // El tiempo paralelo total es el del proceso que terminó más tarde.
   MPI_Reduce(&local_elapsed, &max_elapsed, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
   if (world_rank == 0) {
     result.total_time_ms = max_elapsed;

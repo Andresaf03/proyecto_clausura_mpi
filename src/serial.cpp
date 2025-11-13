@@ -126,6 +126,7 @@ void write_csv(const std::vector<std::vector<int>>& matrix,
 
 namespace bow {
 
+// Ejecuta la versión secuencial completa (I/O, tokenización, matriz y CSV).
 ExperimentResult run_serial(const ExperimentConfig& config) {
   ExperimentResult result;
   if (config.document_paths.empty()) {
