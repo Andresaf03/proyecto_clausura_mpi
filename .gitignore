@@ -3,7 +3,6 @@ build/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-Makefile
 
 # Compiled objects
 *.o
@@ -22,7 +21,8 @@ Makefile
 
 # Env
 .venv
-.vscode
+.vscode/
 
 # Executables
 main
+src/main

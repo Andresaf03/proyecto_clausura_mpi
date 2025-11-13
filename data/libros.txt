@@ -1,6 +1,6 @@
 dickens_a_christmas_carol.txt
 dickens_a_tale_of_two_cities.txt
 dickens_oliver_twist.txt
-shakespear_hamlet.txt
-shakespear_romeo_juliet.txt
-shakespear_the_merchant_of_venice.txt
+shakespeare_hamlet.txt
+shakespeare_romeo_juliet.txt
+shakespeare_the_merchant_of_venice.txt
