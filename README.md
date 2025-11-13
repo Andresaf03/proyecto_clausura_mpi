@@ -54,7 +54,7 @@ Se implementa una versión serial y una paralela, utilizando MPI, para comparar 
 Pasos:
 
 ```bash
-make          # Compila con mpicxx (variable MPI_CXX) y añade -Iinclude automáticamente
+make # Compila con mpicxx (variable MPI_CXX) y añade -Iinclude automáticamente
 ./build/bow_app <num_procs> data/libros.txt <num_experimentos>
 ```
 
