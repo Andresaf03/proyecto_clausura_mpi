@@ -138,6 +138,22 @@ Ambos binarios comparten el mismo código fuente; elige el flujo que te sea más
 
 *Nota:* también se puede utilizar el ejecutable generado por el `Makefile`, basta con sustituir `<./src/main>` por `<./build/bow_app>`.
 
+## Visualización y validación
+
+- Crea un entorno para el notebook:
+
+  ```bash
+  python -m venv .venv
+  source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+  pip install -r src/requirements.txt
+  ```
+
+- Abre `src/bow_visualization.ipynb` en VS Code o Jupyter.
+- Ejecuta todas las celdas, las primeras celdas comprueban que ambos csv generados sean iguales y muestan los resultados. La última celda carga una vista interactiva para:
+  - Elegir el CSV (`results/bow_mpi.csv` o `results/bow_serial.csv`).
+  - Buscar una palabra clave y mostrar solo las columnas que la contienen (deja vacío para ver las primeras columnas).
+- Opcional: si tienes la extensión Data Wrangler en VS Code, abre cualquiera de los CSV y selecciona **Open in Data Wrangler** para filtrarlos con una interfaz de tabla.
+
 ## Estructura del repositorio
 
 ```txt
@@ -168,4 +184,4 @@ Ambos binarios comparten el mismo código fuente; elige el flujo que te sea más
 
 ## Uso responsable y ético de la IA Generativa
 
-Únicamente se utilizo IA Generativa para comentar los fragmentos de código relevantes, planear la estructura del proyecto, diseñar los experimentos y la escritura y lectura de archivos, y revisar las lógicas de implementación. **No** se utilizó IA Generativa para ejecutar código ni para generar datos de ningún tipo, todos los experimentos fueron ejecutados localmente.
+Únicamente se utilizo IA Generativa para comentar los fragmentos de código relevantes, planear la estructura del proyecto, diseñar los experimentos y la escritura y lectura de archivos, revisar las lógicas de implementación y la vista interactiva del *notebook*. **No** se utilizó IA Generativa para ejecutar código ni para generar datos de ningún tipo, todos los experimentos fueron ejecutados localmente.
