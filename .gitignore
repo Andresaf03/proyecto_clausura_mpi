@@ -20,7 +20,9 @@ results/*.csv
 
 # Env
 .venv
+venv/
 .vscode/
+.ipynb_checkpoints/
 
 # Executables
 main
