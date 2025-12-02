@@ -185,3 +185,7 @@ Ambos binarios comparten el mismo código fuente; elige el flujo que te sea más
 ## Uso responsable y ético de la IA Generativa
 
 Únicamente se utilizo IA Generativa para comentar los fragmentos de código relevantes, planear la estructura del proyecto, diseñar los experimentos y la escritura y lectura de archivos, revisar las lógicas de implementación y la vista interactiva del *notebook*. **No** se utilizó IA Generativa para ejecutar código ni para generar datos de ningún tipo, todos los experimentos fueron ejecutados localmente.
+
+## Diagrama de flujo
+
+![diagrama](./images/diagram.svg)
