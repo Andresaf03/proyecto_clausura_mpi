@@ -188,4 +188,4 @@ Ambos binarios comparten el mismo código fuente; elige el flujo que te sea más
 
 ## Diagrama de flujo
 
-![diagrama](./images/diagram.svg)
+![diagrama](./images/diagram.png)
